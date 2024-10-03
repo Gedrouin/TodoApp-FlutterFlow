@@ -1,4 +1,5 @@
 import '/auth/firebase_auth/auth_util.dart';
+import '/backend/api_requests/api_calls.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -89,7 +90,7 @@ class _LoginWidgetState extends State<LoginWidget>
                       ),
                     ),
                     Container(
-                      height: 296.0,
+                      height: 360.0,
                       decoration: const BoxDecoration(),
                       child: Column(
                         children: [
@@ -259,6 +260,8 @@ class _LoginWidgetState extends State<LoginWidget>
                                           focusNode:
                                               _model.signupPasswordFocusNode,
                                           autofocus: false,
+                                          textCapitalization:
+                                              TextCapitalization.sentences,
                                           textInputAction: TextInputAction.next,
                                           obscureText:
                                               !_model.signupPasswordVisibility,
@@ -365,6 +368,8 @@ class _LoginWidgetState extends State<LoginWidget>
                                           focusNode: _model
                                               .signupConfirmPasswordFocusNode,
                                           autofocus: false,
+                                          textCapitalization:
+                                              TextCapitalization.sentences,
                                           textInputAction: TextInputAction.done,
                                           obscureText: !_model
                                               .signupConfirmPasswordVisibility,
@@ -690,6 +695,54 @@ class _LoginWidgetState extends State<LoginWidget>
                                               .asValidator(context),
                                         ),
                                       ),
+                                      FFButtonWidget(
+                                        onPressed: () async {
+                                          if (_model.loginEmailTextController
+                                              .text.isEmpty) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              const SnackBar(
+                                                content: Text(
+                                                  'Email required!',
+                                                ),
+                                              ),
+                                            );
+                                            return;
+                                          }
+                                          await authManager.resetPassword(
+                                            email: _model
+                                                .loginEmailTextController.text,
+                                            context: context,
+                                          );
+                                        },
+                                        text: 'Forgot Password',
+                                        options: FFButtonOptions(
+                                          width: double.infinity,
+                                          height: 40.0,
+                                          padding:
+                                              const EdgeInsetsDirectional.fromSTEB(
+                                                  16.0, 0.0, 16.0, 0.0),
+                                          iconPadding:
+                                              const EdgeInsetsDirectional.fromSTEB(
+                                                  0.0, 0.0, 0.0, 0.0),
+                                          color: FlutterFlowTheme.of(context)
+                                              .primary,
+                                          textStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .labelMedium
+                                                  .override(
+                                                    fontFamily: 'Inter',
+                                                    letterSpacing: 0.0,
+                                                  ),
+                                          elevation: 0.0,
+                                          borderSide: BorderSide(
+                                            color: FlutterFlowTheme.of(context)
+                                                .primaryText,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(24.0),
+                                        ),
+                                      ),
                                     ].divide(const SizedBox(height: 12.0)),
                                   ),
                                 ),
@@ -778,11 +831,15 @@ class _LoginWidgetState extends State<LoginWidget>
                                   .doc(user.uid)
                                   .update(createUsersRecordData(
                                     createdTime: getCurrentTimestamp,
-                                    email: valueOrDefault<String>(
-                                      _model.signupEmailTextController.text,
-                                      'example@gmail.com',
-                                    ),
+                                    email:
+                                        _model.signupEmailTextController.text,
                                   ));
+
+                              await SignupEmailCall.call(
+                                to: _model.signupEmailTextController.text,
+                                subject: 'To Do App',
+                                text: 'Successfully created account',
+                              );
 
                               context.goNamedAuth('onbording', context.mounted);
                             },

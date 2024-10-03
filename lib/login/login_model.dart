@@ -19,11 +19,11 @@ class LoginModel extends FlutterFlowModel<LoginWidget> {
   String? _signupEmailTextControllerValidator(
       BuildContext context, String? val) {
     if (val == null || val.isEmpty) {
-      return 'Field is required';
+      return 'An account with this email already exists';
     }
 
     if (!RegExp(kTextValidatorEmailRegex).hasMatch(val)) {
-      return 'Has to be a valid email address.';
+      return 'Please enter a valid email address';
     }
     return null;
   }
@@ -40,10 +40,15 @@ class LoginModel extends FlutterFlowModel<LoginWidget> {
       return 'Field is required';
     }
 
-    if (val.length < 7) {
-      return 'Requires at least 7 characters.';
+    if (val.length < 8) {
+      return 'Your password is too weak. Please choose a stronger password.';
     }
 
+    if (!RegExp(
+            '(?=^.{8,}\$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*\$')
+        .hasMatch(val)) {
+      return 'Requirements:\nmore than 8 characters\nat least one uppercase letters\nat least one numbers\nat least one special characters';
+    }
     return null;
   }
 
@@ -59,10 +64,15 @@ class LoginModel extends FlutterFlowModel<LoginWidget> {
       return 'Field is required';
     }
 
-    if (val.length < 7) {
-      return 'Requires at least 7 characters.';
+    if (val.length < 8) {
+      return 'Your password is too weak. Please choose a stronger password.';
     }
 
+    if (!RegExp(
+            '(?=^.{8,}\$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*\$')
+        .hasMatch(val)) {
+      return 'Your password is too weak. Please choose a stronger password.';
+    }
     return null;
   }
 
