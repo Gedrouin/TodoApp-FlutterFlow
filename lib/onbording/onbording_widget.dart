@@ -454,9 +454,10 @@ class _OnbordingWidgetState extends State<OnbordingWidget> {
                       await currentUserReference!.update(createUsersRecordData(
                         displayName: _model.nameTextController1.text,
                         birthday: _model.datePicked,
+                        hometown: _model.nameTextController2.text,
                       ));
 
-                      context.goNamed('tasks');
+                      context.goNamed('Welcome');
                     },
                     text: 'Complete Profile',
                     options: FFButtonOptions(
